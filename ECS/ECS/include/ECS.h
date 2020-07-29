@@ -28,11 +28,7 @@ namespace ECS
 			MemoryManager::Delete<SystemManager>(systemManagerAllocator, systemManager);
 		}
 
-		template<class T>
-		void AddComponent(IEntity& entity, T& component)
-		{
-			componentManager->AddComponent<T>(entity.entityID,component);
-		}
+
 
 		template<class T, class... Args>
 		EntityHandle CreateEntity(Args... args)

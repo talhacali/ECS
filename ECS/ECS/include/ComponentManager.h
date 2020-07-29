@@ -35,12 +35,6 @@ namespace ECS
 		ComponentEntityMap componentEntityMap;
 
 
-
-		void AddComponent(EntityID id,T& component)
-		{
-			entityComponentMap[id] = component;
-		}
-
 		template<class T,class E, class... Args>
 		ComponentHandle CreateComponent(EntityHandle eHandle,Args... args)
 		{
@@ -93,13 +87,7 @@ namespace ECS
 		}
 
 	public:
-		template<class T>
-		void AddComponent(EntityID id, T& component)
-		{
-			ComponentCollection<T>* collection = GetComponentCollection<T>();
-			collection->AddComponent(id, component);
-		}
-
+	
 		template<class T,class E,class... Args>
 		ComponentHandle CreateComponent(EntityHandle eHandle,Args... args)
 		{
