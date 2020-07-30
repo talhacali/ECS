@@ -20,15 +20,18 @@ namespace ECS
 	public:
 		static const ClassID classID;
 
-		std::vector<IEntity> entities;
+		std::vector<EntityID> entities;
 		
 		System() { systemID = STATIC_ID_COUNTER++; }
 
 		virtual void Init() {};
 		virtual void Update() {};
 
-		void AddEntity(IEntity const &entity);
-		void RemoveEntity(IEntity const &entity);
+		void RegisterEntity(EntityHandle entityHandle)
+		{
+			entities.push_back(entityHandle.entityId);
+		}
+		void UnRegisterEntity(EntityHandle const & entityHandle);
 
 	private:
 		static SystemID STATIC_ID_COUNTER;

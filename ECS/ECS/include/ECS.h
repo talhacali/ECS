@@ -66,6 +66,12 @@ namespace ECS
 			return systemManager->GetSystem<T>(handle);
 		}
 
+		template<class T>
+		void RegisterEntity(SystemHandle systemHandle,EntityHandle entityHandle)
+		{
+			systemManager->RegisterEntity<T>(systemHandle,entityHandle);
+		}
+
 	public:
 		MemoryManager::PoolAllocator entityManagerAllocator;
 		MemoryManager::PoolAllocator componentManagerAllocator;

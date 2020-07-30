@@ -58,6 +58,12 @@ namespace ECS
 			return systemMap[handle.systemId];
 		}
 
+		/*template<class T>
+		void RegisterEntity(EntityHandle const& handle)
+		{
+			
+			((T*)(systemMap[handle.systemId]))->RegisterEntity(handle);
+		}*/
 
 	};
 
@@ -108,6 +114,16 @@ namespace ECS
 			SystemCollection<T>* collection = GetSystemCollection<T>();
 			return collection->GetSystem<T>(handle);
 		}
+
+		template<class T>
+		void RegisterEntity(SystemHandle systemHandle,EntityHandle entityHandle)
+		{
+			SystemCollection<T>* collection = GetSystemCollection<T>();
+			T* system =  (T*)collection->GetSystem<T>(systemHandle);
+
+			system->RegisterEntity(entityHandle);
+		}
+
 	};
 }
 

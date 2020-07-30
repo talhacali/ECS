@@ -8,9 +8,9 @@
 #include "Movement.h"
 #include "Render.h"
 
-BOOST_AUTO_TEST_SUITE(id_tests)
-
 ECS::EntityComponentSystem ecs;
+
+BOOST_AUTO_TEST_SUITE(id_tests)
 
 BOOST_AUTO_TEST_CASE(class_id_test)
 {
@@ -58,6 +58,27 @@ BOOST_AUTO_TEST_CASE(id_test)
 
 	BOOST_CHECK(((Movement*)ecs.GetSystem<Movement>(sh1))->systemID == 1);
 	BOOST_CHECK(((Render*)ecs.GetSystem<Movement>(sh2))->systemID == 2);
+
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(system_tests)
+
+BOOST_AUTO_TEST_CASE(entity_register_test)
+{
+	ECS::SystemHandle sh1 = ecs.CreateSystem<Movement>(10, 20, 30); //id = 3
+
+	ECS::EntityHandle eh1 = ecs.CreateEntity<Player>("player1", 20); //id = 3
+	ECS::EntityHandle eh2 = ecs.CreateEntity<Player>("Player2", 30); //id = 4
+
+	ecs.RegisterEntity<Movement>(sh1, eh1);
+	ecs.RegisterEntity<Movement>(sh1, eh2);
+
+	Movement* m = ((Movement*)ecs.GetSystem<Movement>(sh1));
+
+	BOOST_CHECK(m->entities.at(0) == 3);
+	BOOST_CHECK(m->entities.at(1) == 4);
 
 }
 

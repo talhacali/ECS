@@ -2,20 +2,20 @@
 
 namespace ECS
 {
-	template<class T>
-	void System<T>::AddEntity(IEntity const &entity)
+	/*template<class T>
+	void System<T>::RegisterEntity(EntityHandle entityHandle)
 	{
-		entities.push_back(entity);
-	}
+		entities.push_back(entityHandle);
+	}*/
 
 	template<class T>
-	void System<T>::RemoveEntity(IEntity const& entity)
+	void System<T>::UnRegisterEntity(EntityHandle const& entityHandle)
 	{
 		for (auto it : entities.begin())
 		{
-			IEntity e = *it;
+			EntityHandle e = *it;
 
-			if (entity.entityID == e.entityID)
+			if (entityHandle.entityId == e.entityId)
 			{
 				entities.erase(it);
 				return;
