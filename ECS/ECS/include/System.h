@@ -31,7 +31,18 @@ namespace ECS
 		{
 			entities.push_back(entityHandle.entityId);
 		}
-		void UnRegisterEntity(EntityHandle const & entityHandle);
+		
+		void UnregisterEntity(EntityHandle entityHandle)
+		{
+			for (unsigned int i = 0; i < entities.size(); i++)
+			{
+				if (entities[i] == entityHandle.entityId)
+				{
+					entities.erase(entities.begin() + i);
+				}
+			}
+
+		}
 
 	private:
 		static SystemID STATIC_ID_COUNTER;

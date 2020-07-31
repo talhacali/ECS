@@ -124,6 +124,15 @@ namespace ECS
 			system->RegisterEntity(entityHandle);
 		}
 
+		template<class T>
+		void UnregisterEntity(SystemHandle systemHandle, EntityHandle entityHandle)
+		{
+			SystemCollection<T>* collection = GetSystemCollection<T>();
+			T* system = (T*)collection->GetSystem<T>(systemHandle);
+
+			system->UnregisterEntity(entityHandle);
+		}
+
 	};
 }
 
