@@ -25,7 +25,7 @@ namespace ECS
 		System() { systemID = STATIC_ID_COUNTER++; }
 
 		virtual void Init() {};
-		virtual void Update() {};
+		virtual void Update(float dt) {};
 
 		void RegisterEntity(EntityHandle entityHandle)
 		{

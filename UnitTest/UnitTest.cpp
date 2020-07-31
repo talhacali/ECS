@@ -96,6 +96,10 @@ BOOST_AUTO_TEST_CASE(entity_unregister_test)
 	BOOST_CHECK(m->entities.size() == 2);
 	ecs.UnregisterEntity<Movement>(sh1, eh1);
 	BOOST_CHECK(m->entities.size() == 1);
+
+	ecs.Init();
+
+	ecs.Update(100);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

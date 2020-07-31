@@ -27,6 +27,10 @@ namespace ECS
 				systemAllocator.Free(it.second);
 			}
 		}
+
+		virtual void Init() = 0;
+		virtual void Update(float dt) = 0;
+		
 	};
 
 	template<class T>
@@ -60,6 +64,24 @@ namespace ECS
 		{
 			return systemMap[handle.systemId];
 		}
+
+		void Init()
+		{
+			for (auto it : systemMap)
+			{
+				it.second->Init();
+			}
+		}
+
+		void Update(float dt)
+		{
+			for (auto it : systemMap)
+			{
+				it.second->Update(dt);
+			}
+		}
+
+		
 
 	};
 
@@ -136,6 +158,22 @@ namespace ECS
 			T* system = (T*)collection->GetSystem<T>(systemHandle);
 
 			system->UnregisterEntity(entityHandle);
+		}
+
+		void Init()
+		{
+			for (auto it : collectionMap)
+			{
+				it.second->Init();
+			}
+		}
+
+		void Update(float dt)
+		{
+			for (auto it : collectionMap)
+			{
+				it.second->Update(dt);
+			}
 		}
 
 	};

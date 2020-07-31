@@ -79,6 +79,16 @@ namespace ECS
 			systemManager->UnregisterEntity<T>(systemHandle, entityHandle);
 		}
 
+		void Init()
+		{
+			systemManager->Init();
+		}
+
+		void Update(float dt)
+		{
+			systemManager->Update(dt);
+		}
+
 	public:
 		MemoryManager::PoolAllocator entityManagerAllocator;
 		MemoryManager::PoolAllocator componentManagerAllocator;
