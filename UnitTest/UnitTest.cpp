@@ -82,4 +82,16 @@ BOOST_AUTO_TEST_CASE(entity_register_test)
 
 }
 
+BOOST_AUTO_TEST_CASE(entity_unregister_test)
+{
+	ECS::SystemHandle sh1 = ecs.CreateSystem<Movement>(10, 20, 30); //id = 4
+	ECS::EntityHandle eh1 = ecs.CreateEntity<Player>("player1", 20); //id = 5
+	ecs.RegisterEntity<Movement>(sh1, eh1);
+	Movement* m = ((Movement*)ecs.GetSystem<Movement>(sh1));
+
+	BOOST_CHECK(m->entities.size() == 6);
+	ecs.UnregisterEntity<Movement>(sh1, eh1);
+	BOOST_CHECK(m->entities.size() == 5);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

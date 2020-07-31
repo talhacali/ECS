@@ -72,6 +72,12 @@ namespace ECS
 			systemManager->RegisterEntity<T>(systemHandle,entityHandle);
 		}
 
+		template<class T>
+		void UnregisterEntity(SystemHandle systemHandle, EntityHandle entityHandle)
+		{
+			systemManager->UnregisterEntity<T>(systemHandle, entityHandle);
+		}
+
 	public:
 		MemoryManager::PoolAllocator entityManagerAllocator;
 		MemoryManager::PoolAllocator componentManagerAllocator;
