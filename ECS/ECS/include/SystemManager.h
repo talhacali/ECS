@@ -7,40 +7,43 @@
 
 namespace ECS
 {
-	/*class SystemManager
+	class ISystemCollection
 	{
-		MemoryManager::PoolAllocator systemAllocator;
-
 	public:
+		MemoryManager::PoolAllocator systemAllocator;
+		using SystemMap = std::unordered_map<SystemID, ISystem*>;
 
+		SystemMap systemMap;
 
-		template<class T,class... Args>
-		SystemHandle CreateSystem(Args... args)
+		ISystemCollection(size_t memsize, size_t objectsize) : systemAllocator(memsize, objectsize)
 		{
 
 		}
 
-	};*/
-
-
-	class ISystemCollection
-	{
-
+		~ISystemCollection()
+		{
+			for (auto it : systemMap)
+			{
+				systemAllocator.Free(it.second);
+			}
+		}
 	};
 
 	template<class T>
 	class SystemCollection : public ISystemCollection
 	{
-		MemoryManager::PoolAllocator systemAllocator;
-		using SystemMap = std::unordered_map<SystemID, ISystem*>;
+		
+		
 
 	public:
-		SystemCollection() : systemAllocator(sizeof(T) * 100, sizeof(T)) {}
+		SystemCollection() : ISystemCollection(sizeof(T) * 100, sizeof(T)) {}
+
+		~SystemCollection()
+		{
+			
+		}
 
 		static const ClassID classID;
-
-
-		SystemMap systemMap;
 
 		template<class T, class... Args>
 		SystemHandle CreateSystem(Args... args)
@@ -57,13 +60,6 @@ namespace ECS
 		{
 			return systemMap[handle.systemId];
 		}
-
-		/*template<class T>
-		void RegisterEntity(EntityHandle const& handle)
-		{
-			
-			((T*)(systemMap[handle.systemId]))->RegisterEntity(handle);
-		}*/
 
 	};
 
@@ -100,6 +96,15 @@ namespace ECS
 
 
 	public:
+		~SystemManager()
+		{
+			for (auto it : collectionMap)
+			{
+				delete it.second;
+			}
+
+		}
+
 		template<class T, class... Args>
 		SystemHandle CreateSystem(Args... args)
 		{

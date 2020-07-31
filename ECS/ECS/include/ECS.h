@@ -26,6 +26,7 @@ namespace ECS
 			MemoryManager::Delete<EntityManager>(entityManagerAllocator, entityManager);
 			MemoryManager::Delete<ComponentManager>(componentManagerAllocator, componentManager);
 			MemoryManager::Delete<SystemManager>(systemManagerAllocator, systemManager);
+
 		}
 
 

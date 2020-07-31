@@ -7,11 +7,33 @@
 #include "Entity.h"
 
 
+
 namespace ECS
 {
 	class IComponentCollection
 	{
-		
+	public:
+		using EntityComponentMap = std::map<EntityID, IComponent*>;
+		//using ComponentEntityMap = std::map<ComponentID, IEntity*>;
+
+		EntityComponentMap entityComponentMap;
+		//ComponentEntityMap componentEntityMap;
+
+		MemoryManager::PoolAllocator componentAllocator;
+
+		IComponentCollection(size_t memsize, size_t objectsize) : componentAllocator(memsize, objectsize)
+		{
+
+		}
+
+		~IComponentCollection()
+		{
+			for (auto it : entityComponentMap)
+			{
+				componentAllocator.Free(it.second);
+			}
+
+		}
 	};
 
 	class EntityComponentSystem;
@@ -20,27 +42,19 @@ namespace ECS
 	class ComponentCollection : public IComponentCollection
 	{
 	private:
-		MemoryManager::PoolAllocator componentAllocator;
+		
 		EntityComponentSystem* ecsInstance;
 	public:
-		ComponentCollection(EntityComponentSystem* ecsInstance_) : componentAllocator(sizeof(T) * 100, sizeof(T)) { ecsInstance = ecsInstance_; }
-
+		ComponentCollection(EntityComponentSystem* ecsInstance_) : IComponentCollection(sizeof(T) * 100, sizeof(T)) { ecsInstance = ecsInstance_; }
 
 		static const ClassID classID;
-
-		using EntityComponentMap = std::map<EntityID, IComponent*>;
-		using ComponentEntityMap = std::map<ComponentID, IEntity*>;
-
-		EntityComponentMap entityComponentMap;
-		ComponentEntityMap componentEntityMap;
-
 
 		template<class T,class E, class... Args>
 		ComponentHandle CreateComponent(EntityHandle eHandle,Args... args)
 		{
 			T* component = MemoryManager::Allocate<T>(componentAllocator, std::forward<Args>(args)...);
 			entityComponentMap[eHandle.entityId] = component;
-			componentEntityMap[component->componentID] = ecsInstance->GetEntity<E>(eHandle);
+			//componentEntityMap[component->componentID] = ecsInstance->GetEntity<E>(eHandle);
 
 			return ComponentHandle(component->componentID, component->classID);
 		}
@@ -87,6 +101,14 @@ namespace ECS
 		}
 
 	public:
+		~ComponentManager()
+		{
+			for (auto it : collectionMap)
+			{
+				delete it.second;
+			}
+
+		}
 	
 		template<class T,class E,class... Args>
 		ComponentHandle CreateComponent(EntityHandle eHandle,Args... args)

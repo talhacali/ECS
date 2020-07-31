@@ -4,26 +4,45 @@
 #include "Entity.h"
 #include <unordered_map>
 
+
+#include <iostream>
+
 namespace ECS
 {
 
 	class IEntityCollection
 	{
+		
+	public:
+		MemoryManager::PoolAllocator entityAllocator;
+		using EntityMap = std::unordered_map<EntityID, IEntity*>;
+		EntityMap entityMap;
 
+		IEntityCollection(size_t memsize, size_t objectsize) : entityAllocator(memsize,objectsize)
+		{
+
+		}
+
+		~IEntityCollection()
+		{
+			for (auto it : entityMap)
+			{
+				std::cout << "Destructor" << std::endl;
+				entityAllocator.Free(it.second);
+			}
+		}
 	};
 
 	template<class T>
 	class EntityCollection : public IEntityCollection
 	{
-		MemoryManager::PoolAllocator entityAllocator;
-		using EntityMap = std::unordered_map<EntityID, IEntity*>;
+		
+		//using EntityMap = std::unordered_map<EntityID, IEntity*>;
 
 	public:
-		EntityCollection() : entityAllocator(sizeof(T)*100,sizeof(T)) {}
+		EntityCollection() : IEntityCollection(sizeof(T) * 100,sizeof(T))  {}
 
 		static const ClassID classID;
-
-		EntityMap entityMap;
 
 		template<class T, class... Args>
 		EntityHandle CreateEntity(Args... args)
@@ -77,6 +96,14 @@ namespace ECS
 		
 
 	public:
+		~EntityManager()
+		{
+			for (auto it : collectionMap)
+			{
+				delete it.second;
+			}
+		}
+
 		template<class T, class... Args>
 		EntityHandle CreateEntity(Args... args)
 		{

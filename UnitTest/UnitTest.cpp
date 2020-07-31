@@ -8,6 +8,7 @@
 #include "Movement.h"
 #include "Render.h"
 
+
 ECS::EntityComponentSystem ecs;
 
 BOOST_AUTO_TEST_SUITE(id_tests)
