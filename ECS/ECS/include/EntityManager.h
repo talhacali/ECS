@@ -55,8 +55,19 @@ namespace ECS
 		}
 
 		template<class T>
+		void DeleteEntity(const EntityHandle& handle)
+		{
+			T* entity = static_cast<T*>(GetEntity<T>(handle));
+			MemoryManager::Delete<T>(entityAllocator, entity);
+			entityMap.erase(handle.entityId);
+		}
+
+		template<class T>
 		IEntity* GetEntity(const EntityHandle& handle)
 		{
+			if (entityMap.find(handle.entityId) == entityMap.end())
+				return nullptr;
+			
 			return entityMap[handle.entityId];
 		}
 
@@ -110,6 +121,14 @@ namespace ECS
 			EntityCollection<T>* collection = GetEntityCollection<T>();
 
 			return collection->CreateEntity<T>(std::forward<Args>(args)...);
+		}
+
+		template<class T>
+		void DeleteEntity(const EntityHandle& handle)
+		{
+			EntityCollection<T>* collection = GetEntityCollection<T>();
+
+			collection->DeleteEntity<T>(handle);
 		}
 
 		template<class T>

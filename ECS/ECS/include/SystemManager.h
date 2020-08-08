@@ -62,6 +62,9 @@ namespace ECS
 		template<class T>
 		ISystem* GetSystem(const SystemHandle& handle)
 		{
+			if (systemMap.find(handle.systemId) == systemMap.end())
+				return nullptr;
+
 			return systemMap[handle.systemId];
 		}
 

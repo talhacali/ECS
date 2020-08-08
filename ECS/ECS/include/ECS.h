@@ -37,6 +37,14 @@ namespace ECS
 			return entityManager->CreateEntity<T>(std::forward<Args>(args)...);
 		}
 
+		template<class E,class C,class S>
+		void DeleteEntity(const EntityHandle& entityHandle,const ComponentHandle& componentHandle, const SystemHandle& systemHandle)
+		{
+			systemManager->UnregisterEntity<S>(systemHandle, entityHandle);
+			componentManager->DeleteComponent<C>(componentHandle, entityHandle);
+			entityManager->DeleteEntity<E>(entityHandle);
+		}
+
 		template<class T,class E, class... Args>
 		ComponentHandle CreateComponent(EntityHandle eHandle,Args... args)
 		{

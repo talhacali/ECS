@@ -62,7 +62,18 @@ namespace ECS
 		template<class T>
 		IComponent* GetComponent(const EntityHandle& handle)
 		{
+			if (entityComponentMap.find(handle.entityId) == entityComponentMap.end())
+				return nullptr;
+
 			return entityComponentMap[handle.entityId];
+		}
+
+		template<class T>
+		void DeleteComponent(const ComponentHandle& componentHandle, const EntityHandle& entityHandle)
+		{
+			T* component = static_cast<T*>(GetComponent<T>(entityHandle));
+			entityComponentMap.erase(entityHandle.entityId);
+			MemoryManager::Delete<T>(componentAllocator, component);
 		}
 
 	};
@@ -115,6 +126,13 @@ namespace ECS
 		{
 			ComponentCollection<T>* collection = GetComponentCollection<T>();
 			return collection->CreateComponent<T,E>(eHandle,std::forward<Args>(args)...);
+		}
+
+		template<class T>
+		void DeleteComponent(const ComponentHandle& componentHandle, const EntityHandle& entityHandle)
+		{
+			ComponentCollection<T>* collection = GetComponentCollection<T>();
+			collection->DeleteComponent<T>(componentHandle, entityHandle);
 		}
 		
 		template<class T>

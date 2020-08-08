@@ -102,4 +102,26 @@ BOOST_AUTO_TEST_CASE(entity_unregister_test)
 	ecs.Update(100);
 }
 
+BOOST_AUTO_TEST_CASE(entity_delete_test)
+{
+	ECS::SystemHandle sh1 = ecs.CreateSystem<Movement>(10, 20, 30); //id = 4
+
+	ECS::EntityHandle eh1 = ecs.CreateEntity<Player>("player1", 20); //id = 5
+	ECS::EntityHandle eh2 = ecs.CreateEntity<Player>("Player2", 30);
+	
+	ECS::ComponentHandle ch1 = ecs.CreateComponent<Transform, Player>(eh1, 1.0f, 2.0f, 3.0f);
+	ECS::ComponentHandle ch2 = ecs.CreateComponent<Transform, Player>(eh2, 10.0f, 20.0f, 30.0f);
+
+	ecs.RegisterEntity<Movement>(sh1, eh1);
+	ecs.RegisterEntity<Movement>(sh1, eh2);
+
+	ecs.DeleteEntity<Player, Transform, Movement>(eh1, ch1, sh1);
+
+	Player* p1 = ((Player*)ecs.GetEntity<Player>(eh1));
+	Player* p2 = ((Player*)ecs.GetEntity<Player>(eh2));
+
+	BOOST_CHECK(p1 == nullptr);
+	BOOST_CHECK(p2 != nullptr);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
