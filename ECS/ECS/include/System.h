@@ -27,12 +27,12 @@ namespace ECS
 		virtual void Init() {};
 		virtual void Update(float dt) {};
 
-		void RegisterEntity(EntityHandle entityHandle)
+		void RegisterEntity(const EntityHandle& entityHandle)
 		{
 			entities.push_back(entityHandle.entityId);
 		}
 		
-		void UnregisterEntity(EntityHandle entityHandle)
+		void UnregisterEntity(const EntityHandle& entityHandle)
 		{
 			for (unsigned int i = 0; i < entities.size(); i++)
 			{

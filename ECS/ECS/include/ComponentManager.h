@@ -60,7 +60,7 @@ namespace ECS
 		}
 
 		template<class T>
-		IComponent* GetComponent(EntityHandle handle)
+		IComponent* GetComponent(const EntityHandle& handle)
 		{
 			return entityComponentMap[handle.entityId];
 		}
@@ -118,7 +118,7 @@ namespace ECS
 		}
 		
 		template<class T>
-		IComponent* GetComponent(EntityHandle handle)
+		IComponent* GetComponent(const EntityHandle& handle)
 		{
 			ComponentCollection<T>* collection = GetComponentCollection<T>();
 			return collection->GetComponent<T>(handle);

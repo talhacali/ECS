@@ -50,31 +50,31 @@ namespace ECS
 		}
 
 		template<class T>
-		IEntity* GetEntity(EntityHandle handle)
+		IEntity* GetEntity(const EntityHandle& handle)
 		{
 			return entityManager->GetEntity<T>(handle);
 		}
 
 		template<class T>
-		IComponent* GetComponent(EntityHandle handle)
+		IComponent* GetComponent(const EntityHandle& handle)
 		{
 			return componentManager->GetComponent<T>(handle);
 		}
 
 		template<class T>
-		ISystem* GetSystem(SystemHandle handle)
+		ISystem* GetSystem(const SystemHandle& handle)
 		{
 			return systemManager->GetSystem<T>(handle);
 		}
 
 		template<class T>
-		void RegisterEntity(SystemHandle systemHandle,EntityHandle entityHandle)
+		void RegisterEntity(const SystemHandle& systemHandle,const EntityHandle& entityHandle)
 		{
 			systemManager->RegisterEntity<T>(systemHandle,entityHandle);
 		}
 
 		template<class T>
-		void UnregisterEntity(SystemHandle systemHandle, EntityHandle entityHandle)
+		void UnregisterEntity(const SystemHandle& systemHandle, const EntityHandle& entityHandle)
 		{
 			systemManager->UnregisterEntity<T>(systemHandle, entityHandle);
 		}

@@ -60,7 +60,7 @@ namespace ECS
 		}
 
 		template<class T>
-		ISystem* GetSystem(SystemHandle handle)
+		ISystem* GetSystem(const SystemHandle& handle)
 		{
 			return systemMap[handle.systemId];
 		}
@@ -136,14 +136,14 @@ namespace ECS
 		}
 
 		template<class T>
-		ISystem* GetSystem(SystemHandle handle)
+		ISystem* GetSystem(const SystemHandle& handle)
 		{
 			SystemCollection<T>* collection = GetSystemCollection<T>();
 			return collection->GetSystem<T>(handle);
 		}
 
 		template<class T>
-		void RegisterEntity(SystemHandle systemHandle,EntityHandle entityHandle)
+		void RegisterEntity(const SystemHandle& systemHandle,const EntityHandle& entityHandle)
 		{
 			SystemCollection<T>* collection = GetSystemCollection<T>();
 			T* system =  (T*)collection->GetSystem<T>(systemHandle);
@@ -152,7 +152,7 @@ namespace ECS
 		}
 
 		template<class T>
-		void UnregisterEntity(SystemHandle systemHandle, EntityHandle entityHandle)
+		void UnregisterEntity(const SystemHandle& systemHandle,const EntityHandle& entityHandle)
 		{
 			SystemCollection<T>* collection = GetSystemCollection<T>();
 			T* system = (T*)collection->GetSystem<T>(systemHandle);

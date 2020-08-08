@@ -55,7 +55,7 @@ namespace ECS
 		}
 
 		template<class T>
-		IEntity* GetEntity(EntityHandle handle)
+		IEntity* GetEntity(const EntityHandle& handle)
 		{
 			return entityMap[handle.entityId];
 		}
@@ -113,7 +113,7 @@ namespace ECS
 		}
 
 		template<class T>
-		IEntity* GetEntity(EntityHandle handle)
+		IEntity* GetEntity(const EntityHandle& handle)
 		{
 			EntityCollection<T>* collection = GetEntityCollection<T>();
 			return collection->GetEntity<T>(handle);
