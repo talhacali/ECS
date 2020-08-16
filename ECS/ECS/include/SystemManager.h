@@ -60,12 +60,12 @@ namespace ECS
 		}
 
 		template<class T>
-		ISystem* GetSystem(const SystemHandle& handle)
+		ISystem* GetSystem(const SystemID& systemID)
 		{
-			if (systemMap.find(handle.systemId) == systemMap.end())
+			if (systemMap.find(systemID) == systemMap.end())
 				return nullptr;
 
-			return systemMap[handle.systemId];
+			return systemMap[systemID];
 		}
 
 		void Init()
@@ -139,28 +139,28 @@ namespace ECS
 		}
 
 		template<class T>
-		ISystem* GetSystem(const SystemHandle& handle)
+		ISystem* GetSystem(const SystemID& systemID)
 		{
 			SystemCollection<T>* collection = GetSystemCollection<T>();
-			return collection->GetSystem<T>(handle);
+			return collection->GetSystem<T>(systemID);
 		}
 
 		template<class T>
-		void RegisterEntity(const SystemHandle& systemHandle,const EntityHandle& entityHandle)
+		void RegisterEntity(const SystemID& systemID,const EntityID& entityID)
 		{
 			SystemCollection<T>* collection = GetSystemCollection<T>();
-			T* system =  (T*)collection->GetSystem<T>(systemHandle);
+			T* system =  (T*)collection->GetSystem<T>(systemID);
 
-			system->RegisterEntity(entityHandle);
+			system->RegisterEntity(entityID);
 		}
 
 		template<class T>
-		void UnregisterEntity(const SystemHandle& systemHandle,const EntityHandle& entityHandle)
+		void UnregisterEntity(const SystemID& systemID,const EntityID& entityID)
 		{
 			SystemCollection<T>* collection = GetSystemCollection<T>();
-			T* system = (T*)collection->GetSystem<T>(systemHandle);
+			T* system = (T*)collection->GetSystem<T>(systemID);
 
-			system->UnregisterEntity(entityHandle);
+			system->UnregisterEntity(entityID);
 		}
 
 		void Init()

@@ -55,20 +55,20 @@ namespace ECS
 		}
 
 		template<class T>
-		void DeleteEntity(const EntityHandle& handle)
+		void DeleteEntity(const EntityID& entityID)
 		{
-			T* entity = static_cast<T*>(GetEntity<T>(handle));
+			T* entity = static_cast<T*>(GetEntity<T>(entityID));
 			MemoryManager::Delete<T>(entityAllocator, entity);
-			entityMap.erase(handle.entityId);
+			entityMap.erase(entityID);
 		}
 
 		template<class T>
-		IEntity* GetEntity(const EntityHandle& handle)
+		IEntity* GetEntity(const EntityID& entityID)
 		{
-			if (entityMap.find(handle.entityId) == entityMap.end())
+			if (entityMap.find(entityID) == entityMap.end())
 				return nullptr;
 			
-			return entityMap[handle.entityId];
+			return entityMap[entityID];
 		}
 
 
@@ -124,18 +124,18 @@ namespace ECS
 		}
 
 		template<class T>
-		void DeleteEntity(const EntityHandle& handle)
+		void DeleteEntity(const EntityID& entityID)
 		{
 			EntityCollection<T>* collection = GetEntityCollection<T>();
 
-			collection->DeleteEntity<T>(handle);
+			collection->DeleteEntity<T>(entityID);
 		}
 
 		template<class T>
-		IEntity* GetEntity(const EntityHandle& handle)
+		IEntity* GetEntity(const EntityID& entityID)
 		{
 			EntityCollection<T>* collection = GetEntityCollection<T>();
-			return collection->GetEntity<T>(handle);
+			return collection->GetEntity<T>(entityID);
 		}
 	};
 }

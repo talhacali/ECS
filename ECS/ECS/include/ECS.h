@@ -38,17 +38,17 @@ namespace ECS
 		}
 
 		template<class E,class C,class S>
-		void DeleteEntity(const EntityHandle& entityHandle,const ComponentHandle& componentHandle, const SystemHandle& systemHandle)
+		void DeleteEntity(const EntityID& entityID,const ComponentHandle& componentHandle, const SystemID& systemID)
 		{
-			systemManager->UnregisterEntity<S>(systemHandle, entityHandle);
-			componentManager->DeleteComponent<C>(componentHandle, entityHandle);
-			entityManager->DeleteEntity<E>(entityHandle);
+			systemManager->UnregisterEntity<S>(systemID, entityID);
+			componentManager->DeleteComponent<C>(componentHandle, entityID);
+			entityManager->DeleteEntity<E>(entityID);
 		}
 
 		template<class T,class E, class... Args>
-		ComponentHandle CreateComponent(EntityHandle eHandle,Args... args)
+		ComponentHandle CreateComponent(EntityID entityID,Args... args)
 		{
-			return componentManager->CreateComponent<T,E>(eHandle,std::forward<Args>(args)...);
+			return componentManager->CreateComponent<T,E>(entityID,std::forward<Args>(args)...);
 		}
 
 		template<class T,class... Args>
@@ -58,33 +58,33 @@ namespace ECS
 		}
 
 		template<class T>
-		IEntity* GetEntity(const EntityHandle& handle)
+		IEntity* GetEntity(const EntityID& entityID)
 		{
-			return entityManager->GetEntity<T>(handle);
+			return entityManager->GetEntity<T>(entityID);
 		}
 
 		template<class T>
-		IComponent* GetComponent(const EntityHandle& handle)
+		IComponent* GetComponent(const EntityID& entityID)
 		{
-			return componentManager->GetComponent<T>(handle);
+			return componentManager->GetComponent<T>(entityID);
 		}
 
 		template<class T>
-		ISystem* GetSystem(const SystemHandle& handle)
+		ISystem* GetSystem(const SystemID& systemID)
 		{
-			return systemManager->GetSystem<T>(handle);
+			return systemManager->GetSystem<T>(systemID);
 		}
 
 		template<class T>
-		void RegisterEntity(const SystemHandle& systemHandle,const EntityHandle& entityHandle)
+		void RegisterEntity(const SystemID& systemID,const EntityID& entityID)
 		{
-			systemManager->RegisterEntity<T>(systemHandle,entityHandle);
+			systemManager->RegisterEntity<T>(systemID, entityID);
 		}
 
 		template<class T>
-		void UnregisterEntity(const SystemHandle& systemHandle, const EntityHandle& entityHandle)
+		void UnregisterEntity(const SystemID& systemID, const EntityID& entityID)
 		{
-			systemManager->UnregisterEntity<T>(systemHandle, entityHandle);
+			systemManager->UnregisterEntity<T>(systemID, entityID);
 		}
 
 		void Init()

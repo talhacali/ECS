@@ -50,29 +50,29 @@ namespace ECS
 		static const ClassID classID;
 
 		template<class T,class E, class... Args>
-		ComponentHandle CreateComponent(EntityHandle eHandle,Args... args)
+		ComponentHandle CreateComponent(EntityID entityID,Args... args)
 		{
 			T* component = MemoryManager::Allocate<T>(componentAllocator, std::forward<Args>(args)...);
-			entityComponentMap[eHandle.entityId] = component;
+			entityComponentMap[entityID] = component;
 			//componentEntityMap[component->componentID] = ecsInstance->GetEntity<E>(eHandle);
 
 			return ComponentHandle(component->componentID, component->classID);
 		}
 
 		template<class T>
-		IComponent* GetComponent(const EntityHandle& handle)
+		IComponent* GetComponent(const EntityID& entityID)
 		{
-			if (entityComponentMap.find(handle.entityId) == entityComponentMap.end())
+			if (entityComponentMap.find(entityID) == entityComponentMap.end())
 				return nullptr;
 
-			return entityComponentMap[handle.entityId];
+			return entityComponentMap[entityID];
 		}
 
 		template<class T>
-		void DeleteComponent(const ComponentHandle& componentHandle, const EntityHandle& entityHandle)
+		void DeleteComponent(const ComponentHandle& componentHandle, const EntityID& entityID)
 		{
-			T* component = static_cast<T*>(GetComponent<T>(entityHandle));
-			entityComponentMap.erase(entityHandle.entityId);
+			T* component = static_cast<T*>(GetComponent<T>(entityID));
+			entityComponentMap.erase(entityID);
 			MemoryManager::Delete<T>(componentAllocator, component);
 		}
 
@@ -122,24 +122,24 @@ namespace ECS
 		}
 	
 		template<class T,class E,class... Args>
-		ComponentHandle CreateComponent(EntityHandle eHandle,Args... args)
+		ComponentHandle CreateComponent(EntityID entityID,Args... args)
 		{
 			ComponentCollection<T>* collection = GetComponentCollection<T>();
-			return collection->CreateComponent<T,E>(eHandle,std::forward<Args>(args)...);
+			return collection->CreateComponent<T,E>(entityID,std::forward<Args>(args)...);
 		}
 
 		template<class T>
-		void DeleteComponent(const ComponentHandle& componentHandle, const EntityHandle& entityHandle)
+		void DeleteComponent(const ComponentHandle& componentHandle, const EntityID& entityID)
 		{
 			ComponentCollection<T>* collection = GetComponentCollection<T>();
-			collection->DeleteComponent<T>(componentHandle, entityHandle);
+			collection->DeleteComponent<T>(componentHandle, entityID);
 		}
 		
 		template<class T>
-		IComponent* GetComponent(const EntityHandle& handle)
+		IComponent* GetComponent(const EntityID& entityID)
 		{
 			ComponentCollection<T>* collection = GetComponentCollection<T>();
-			return collection->GetComponent<T>(handle);
+			return collection->GetComponent<T>(entityID);
 		}
 
 	};
